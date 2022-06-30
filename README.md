@@ -29,7 +29,7 @@ PORT="3000"
 
 
 
-- how to set auth token in the header
+## how to set auth token in the header
 ### header
 ```
 Authorization : [x-token]  
