@@ -16,7 +16,6 @@ func CreateCharacter(c *gin.Context) {
 	var character Models.CreateCharacterRequest
 	c.BindJSON(&character)
 
-	fmt.Println("character in controller", character)
 	err := Models.CreateCharacter(&character)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
@@ -74,7 +73,6 @@ func DrawCharacters(c *gin.Context) {
 	}
 
 	err := Models.CreateCharacterList(characterList)
-	fmt.Println("write the list to user character table", characterList)
 
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)

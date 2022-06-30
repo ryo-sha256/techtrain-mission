@@ -7,6 +7,10 @@ import (
 	cnfg "techtrain-mission/config"
 )
 
+// NOTE: This file contains all of the functions that
+//       interact directly with database.
+//       Additional service code/logic should be in controller files
+
 // creates one chracter
 func CreateCharacter(c *CreateCharacterRequest) (err error) {
 
@@ -42,7 +46,7 @@ func GetCharacterList(c *[]UserCharacter, token string) (err error) {
 
 // creates a character list with its owner's id
 func CreateCharacterList(c []interface{}) (err error) {
-	runtimeErr := gormbulk.BulkInsert(cnfg.DB_CONN, c, 1000)
+	runtimeErr := gormbulk.BulkInsert(cnfg.DB_CONN, c, 100)
 
 	if runtimeErr != nil {
 		fmt.Println(err)

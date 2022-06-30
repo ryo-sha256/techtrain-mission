@@ -8,7 +8,7 @@ import (
 
 // NOTE: This file contains all of the functions that
 //       interact directly with database.
-//       There should be no need for additional service code
+//       Additional service code/logic should be in controller files
 
 // Create User: writes user data to database
 func CreateUser(u *User) (err error) {

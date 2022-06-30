@@ -21,11 +21,12 @@ func main() {
 	}
 
 	defer config.DB_CONN.Close()
-	// table for the list of active users, all the characters
-	// and who owns which character
+
+	// User : user table
+	// CreateCharacterRequest : character table
+	// UserCharacter : table to store the relation of user and character
 	config.DB_CONN.AutoMigrate(&models.User{}, &models.CreateCharacterRequest{}, &models.UserCharacter{})
 
-	// router goes here
 	r := routers.RouterBuilder()
 	r.Run()
 }

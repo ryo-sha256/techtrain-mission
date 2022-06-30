@@ -22,7 +22,7 @@ func ExtractAuthToken(c *gin.Context) string {
 	if authHeader == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"code": 401,
-			"msg":  "Request header auth Empty",
+			"msg":  "Authorization token is empty",
 		})
 		c.Abort()
 		return ""
