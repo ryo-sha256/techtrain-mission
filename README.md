@@ -25,6 +25,11 @@ PORT="3000"
  e.g.) to register a character whose drop rate is 10%, set it as "0.10"
 
 
+
+
+
+
+- how to set auth token in the header
 ### header
 ```
 Authorization : [x-token]  
