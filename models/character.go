@@ -13,7 +13,6 @@ import (
 
 // creates one chracter
 func CreateCharacter(c *CreateCharacterRequest) (err error) {
-
 	if err = cnfg.DB_CONN.Create(c).Error; err != nil {
 		fmt.Println(err)
 		return err
@@ -21,14 +20,30 @@ func CreateCharacter(c *CreateCharacterRequest) (err error) {
 	return nil
 }
 
+// gets a list of probability distribution for character's rarity
+func CreateRarityList(r *RarityList) (err error) {
+	fmt.Println("invoked here")
+	if err = cnfg.DB_CONN.Create(r).Error; err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
+}
+
+// gets a list of probability distribution for character's rarity
+func GetRarityList(r *RarityList) (err error) {
+	fmt.Println("invoked here get rarity_list")
+	if err = cnfg.DB_CONN.Find(r).Error; err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
+}
+
 // gets a single characters based on the given probability
-func GetCharacter(c *CreateCharacterRequest, probability float32) (err error) {
-	// the logic for 'gacha' are the followings:
-	// 1, grab the list of all the characters in probability's ascending order
-	// 2, return the first character whose probability is lower than the given probability
-	// FIXME: this is still a very naive way of giving each character probability distribution
-	//        since the query below has to assume there is always a lower bound "0.01"
-	if err = cnfg.DB_CONN.Where("probability BETWEEN ? AND ?", 0, probability).Order("probability desc").Limit(1).Find(c).Error; err != nil {
+func GetCharacter(c *CreateCharacterRequest, rarity string) (err error) {
+
+	if err = cnfg.DB_CONN.Raw("SELECT * FROM create_character_requests WHERE rarity = ?", rarity).Take(c).Error; err != nil {
 		fmt.Println(err)
 		return err
 	}

@@ -25,7 +25,12 @@ func main() {
 	// User : user table
 	// CreateCharacterRequest : character table
 	// UserCharacter : table to store the relation of user and character
-	config.DB_CONN.AutoMigrate(&models.User{}, &models.CreateCharacterRequest{}, &models.UserCharacter{})
+	// RarerityList : table to store the list of character drop rate
+	config.DB_CONN.AutoMigrate(
+		&models.User{},
+		&models.CreateCharacterRequest{},
+		&models.UserCharacter{},
+		&models.RarityList{})
 
 	r := routers.RouterBuilder()
 	r.Run()

@@ -10,10 +10,34 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// creates a list of drop rate for each rarity, such as common, uncommon, and rare
+// @param: float number between 0 and 1 for each rarity
+func CreateRarityList(c *gin.Context) {
+	fmt.Println("invoked in CreateRarityList")
+	var rarityList Models.RarityList
+	c.BindJSON(&rarityList)
+
+	err := Models.CreateRarityList(&rarityList)
+	if err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+	} else {
+		fmt.Println("setting up the list of drop rates....")
+		c.JSON(http.StatusOK, rarityList)
+	}
+}
+
+func GetRarityList(c *gin.Context, r *Models.RarityList) {
+	err := Models.GetRarityList(r)
+	if err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+	}
+}
+
 // creates a character and write it to database table
 // @param :none
 func CreateCharacter(c *gin.Context) {
 	var character Models.CreateCharacterRequest
+
 	c.BindJSON(&character)
 
 	err := Models.CreateCharacter(&character)
@@ -40,17 +64,25 @@ func DrawCharacters(c *gin.Context) {
 		return
 	}
 
-	// var characterList Models.CharacterListResponse
-	// make goes here
 	var characterList []interface{}
 	var probablityList = Utils.RandGenerator(times)
 	var res Models.GachaDrawResponse
+	var rarityList Models.RarityList
+
+	err := Models.GetRarityList(&rarityList)
+	if err != nil {
+		fmt.Println("ERROR: error occured when retrieving rarity list")
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 
 	for i := 0; i < times; i++ {
 		var character Models.CreateCharacterRequest
 
+		rarity := Utils.RarityTable(probablityList[i], rarityList)
+
 		// randomly retrieve a character from the database
-		err := Models.GetCharacter(&character, probablityList[i])
+		err := Models.GetCharacter(&character, rarity)
 
 		if err != nil {
 			c.AbortWithStatus(http.StatusNotFound)
@@ -72,7 +104,7 @@ func DrawCharacters(c *gin.Context) {
 		}
 	}
 
-	err := Models.CreateCharacterList(characterList)
+	err = Models.CreateCharacterList(characterList)
 
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)

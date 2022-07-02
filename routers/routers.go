@@ -15,8 +15,8 @@ func RouterBuilder() *gin.Engine {
 
 	r.POST("/gacha/create", Controllers.CreateCharacter)
 	r.GET("/gacha/draw", Controllers.DrawCharacters)
-
 	r.GET("/character/list", Controllers.GetCharacterList)
+	r.POST("/character/rarity", Controllers.CreateRarityList)
 
 	return r
 }
